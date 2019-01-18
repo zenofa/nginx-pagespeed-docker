@@ -11,8 +11,5 @@ mkdir -p /etc/nginx/ssl
 
 mkdir -p /app/www
 
-<<<<<<< HEAD
-echo "<html><head>Success</head><body><p><a href="https://hub.docker.com/u/zenofa/">funkygibbon</a>/nginx:${NGINX_VERSION}-${OPENSSL_VERSION} - `date`</p>" > /app/www/index.html
-=======
-echo "<html><head>Success</head><body><p><a href="https://hub.docker.com/u/funkygibbon/">funkygibbon</a>/nginx:${NGINX_VERSION}-${OPENSSL_VERSION} - `date`</p>" > /app/www/index.html
->>>>>>> master
+echo "<html><head>Success</head><body><p><a href="https://hub.docker.com/u/zenofa/">Zenofa</a>/nginx:${NGINX_VERSION}-${OPENSSL_VERSION} - `date`</p>" > /app/www/index.html
+
