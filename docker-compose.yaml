@@ -4,3 +4,4 @@ services:
     image: zenofa/nginx-pagespeed:latest
     ports:
       - "80:8080"
+      

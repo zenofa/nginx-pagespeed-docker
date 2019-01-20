@@ -2,7 +2,7 @@
 
 echo "Downloading incubator-pagespeed-ngx ${NGINX_PAGESPEED_VERSION} from https://github.com/apache/incubator-pagespeed-ngx/archive/${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}.tar.gz..."
 
-wget -O - https://github.com/apache/incubator-pagespeed-ngx/archive/${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}.tar.gz --progress=bar --tries=3 \
+wget --no-check-certificate -O - https://github.com/apache/incubator-pagespeed-ngx/archive/${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}.tar.gz --progress=bar --tries=3 \
 	| tar zxf - -C /tmp
 
 PSOL_URL=$(cat "/tmp/incubator-pagespeed-ngx-${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}/PSOL_BINARY_URL")
@@ -16,5 +16,5 @@ fi
 
 echo "Downloading incubator-pagespeed-ngx PSOL ${NGINX_PAGESPEED_VERSION} from ${PSOL_URL/\$BIT_SIZE_NAME/$PSOL_BIT_SIZE_NAME}..."
 
-wget -O - ${PSOL_URL/\$BIT_SIZE_NAME/$PSOL_BIT_SIZE_NAME} --progress=bar --tries=3 \
+wget --no-check-certificate -O - ${PSOL_URL/\$BIT_SIZE_NAME/$PSOL_BIT_SIZE_NAME} --progress=bar --tries=3 \
 	| tar zxf - -C /tmp/incubator-pagespeed-ngx-${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS}/

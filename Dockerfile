@@ -1,12 +1,12 @@
-FROM zenofa/ubuntu:latest
+FROM zenofa/ubuntu:bionic
 
-EXPOSE 80
+EXPOSE 8080
 EXPOSE 443
 
 ENV DEBIAN_FRONTEND noninteractive
 
 # http://nginx.org/en/download.html
-ENV NGINX_VERSION 1.13.12
+ENV NGINX_VERSION 1.14.2
 
 # https://github.com/apache/incubator-pagespeed-ngx/releases
 ENV NGINX_PAGESPEED_VERSION latest
@@ -16,10 +16,10 @@ ENV NGINX_PAGESPEED_RELEASE_STATUS stable
 #ENV PAGESPEED_PSOL_VERSION 1.11.33.4
 
 # https://github.com/openresty/headers-more-nginx-module/tags
-ENV HEADERS_MORE_VERSION 0.32
+ENV HEADERS_MORE_VERSION 0.33
 
 # https://www.openssl.org/source
-ENV OPENSSL_VERSION 1.1.0g
+ENV OPENSSL_VERSION 1.1.1a
 
 COPY ./bin/download_pagespeed.sh /app/bin/download_pagespeed.sh
 
@@ -28,11 +28,12 @@ useradd -r -s /usr/sbin/nologin nginx && mkdir -p /var/log/nginx /var/cache/ngin
 apt-get update && \
 apt-get -o Dpkg::Options::="--force-confold" -yq --no-install-recommends install wget git-core autoconf automake libtool build-essential zlib1g-dev libpcre3-dev libxslt1-dev libxml2-dev libgd-dev libgeoip-dev libgoogle-perftools-dev libperl-dev uuid-dev && \
 echo "Downloading nginx ${NGINX_VERSION} from http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz ..." && \
-wget -O - http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz --progress=bar --tries=3 | tar zxf - -C /tmp && \
+wget --no-check-certificate -O - http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz --progress=bar --tries=3 | tar zxf - -C /tmp && \
 echo "Downloading headers-more ${HEADERS_MORE_VERSION} from https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz ..." && \
-wget -O - https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz --progress=bar --tries=3 | tar zxf - -C /tmp && \
+wget --no-check-certificate -O - https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz --progress=bar --tries=3 | tar zxf - -C /tmp && \
 /app/bin/download_pagespeed.sh && \
-echo "Downloading openssl v${OPENSSL_VERSION} from https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz ..." && wget -O - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz --progress=bar --tries=3 | tar xzf - -C /tmp && \
+echo "Downloading openssl v${OPENSSL_VERSION} from https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz ..." && \
+wget --no-check-certificate -O - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz --progress=bar --tries=3 | tar xzf - -C /tmp && \
 cd /tmp/nginx-${NGINX_VERSION} && \
 ./configure \
 --prefix=/etc/nginx \
@@ -99,6 +100,7 @@ ENV SSL_ENABLED true
 
 COPY . /app
 
-RUN chmod a+x /app/bin/*.sh && sync && /app/bin/init_nginx.sh
+RUN chmod a+x /app/bin/*.sh && sync && \
+/app/bin/init_nginx.sh
 
 CMD ["/sbin/my_init"]
