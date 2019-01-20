@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/bin/sh
 set -e
 
 cp -R /app/etc/* /etc
@@ -12,4 +11,5 @@ mkdir -p /etc/nginx/ssl
 
 mkdir -p /app/www
 
-echo "<html><head>Success</head><body><p><a href="https://hub.docker.com/u/zenofa/">Zenofa</a>/nginx:${NGINX_VERSION}-${OPENSSL_VERSION} - `date`</p>" > /app/www/index.html
+echo "Hello"
+echo "<html><head>Success</head><body><p><a href="https://hub.docker.com/u/zenofa/">zenofa</a>/nginx:${NGINX_VERSION}-${OPENSSL_VERSION} - `date`</p>" > /app/www/index.html
