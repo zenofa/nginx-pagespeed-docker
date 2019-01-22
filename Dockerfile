@@ -26,7 +26,7 @@ COPY ./bin/download_pagespeed.sh /app/bin/download_pagespeed.sh
 RUN chmod a+x /app/bin/*.sh && \
 useradd -r -s /usr/sbin/nologin nginx && mkdir -p /var/log/nginx /var/cache/nginx && \
 apt-get update && \
-apt-get -o Dpkg::Options::="--force-confold" -yq --no-install-recommends install wget git-core autoconf automake libtool build-essential zlib1g-dev libpcre3-dev libxslt1-dev libxml2-dev libgd-dev libgeoip-dev libgoogle-perftools-dev libperl-dev uuid-dev && \
+apt-get -o Dpkg::Options::="--force-confold" -yq --no-install-recommends install  wget git-core autoconf automake make gcc libtool build-essential zlib1g-dev libpcre3-dev libxslt1-dev libxml2-dev libgd-dev libgeoip-dev libgoogle-perftools-dev libperl-dev uuid-dev && \
 echo "Downloading nginx ${NGINX_VERSION} from http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz ..." && \
 wget --no-check-certificate -O - http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz --progress=bar --tries=3 | tar zxf - -C /tmp && \
 echo "Downloading headers-more ${HEADERS_MORE_VERSION} from https://github.com/openresty/headers-more-nginx-module/archive/v${HEADERS_MORE_VERSION}.tar.gz ..." && \
@@ -34,6 +34,7 @@ wget --no-check-certificate -O - https://github.com/openresty/headers-more-nginx
 /app/bin/download_pagespeed.sh && \
 echo "Downloading openssl v${OPENSSL_VERSION} from https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz ..." && \
 wget --no-check-certificate -O - https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz --progress=bar --tries=3 | tar xzf - -C /tmp && \
+cd /tmp/openssl-${OPENSSL_VERSION} && ./config && make install && mv /usr/bin/openssl ~/tmp && ln -s /usr/local/bin/openssl /usr/bin/openssl && ldconfig &&\
 cd /tmp/nginx-${NGINX_VERSION} && \
 ./configure \
 --prefix=/etc/nginx \
@@ -81,7 +82,7 @@ cd /tmp/nginx-${NGINX_VERSION} && \
 --add-module=/tmp/incubator-pagespeed-ngx-${NGINX_PAGESPEED_VERSION}-${NGINX_PAGESPEED_RELEASE_STATUS} && \
 make && \
 make install && \
-apt-get purge -yqq automake autoconf libtool git-core build-essential zlib1g-dev libpcre3-dev libxslt1-dev libxml2-dev libgd-dev libgeoip-dev libgoogle-perftools-dev libperl-dev && \
+apt-get purge -yqq automake make gcc autoconf libtool git-core build-essential zlib1g-dev libpcre3-dev libxslt1-dev libxml2-dev libgd-dev libgeoip-dev libgoogle-perftools-dev libperl-dev && \
 apt-get autoremove -yqq && \
 apt-get clean && \
 rm -Rf /tmp/* /var/tmp/* /var/lib/apt/lists/*
